@@ -3,6 +3,7 @@ package net.tyt.sample.logging;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -47,19 +48,18 @@ public class Application {
         log.info("Started application {} v.{}, build timestamp {}, branch {}, commit {}",title,version,timestamp,branch,commit);
         
         final Environment env = event.getApplicationContext().getEnvironment();
-        log.info("=== Environment properties ===");
         final MutablePropertySources sources = ((AbstractEnvironment) env).getPropertySources();
         sources.stream()
                 .filter(EnumerablePropertySource.class::isInstance)
                 .map(EnumerablePropertySource.class::cast)
                 .forEach(this::printSource);
-        log.info("==============================");
     }
     
     private void printSource(EnumerablePropertySource eps) {
-        log.info("== {} ==",eps.getName());
-        Arrays.stream(eps.getPropertyNames())
-                .forEachOrdered(prop -> log.info("{} = {}", prop, eps.getProperty(prop)));
+        log.info("PropertySource '{}':\n{}",eps.getName(),
+            Arrays.stream(eps.getPropertyNames())
+                .map(prop -> prop+" = "+eps.getProperty(prop)).collect(Collectors.joining("\n"))
+        );
     }
 
     @EventListener(ContextClosedEvent.class)
