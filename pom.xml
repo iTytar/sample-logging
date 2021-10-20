@@ -30,7 +30,18 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <!-- JACABI -->
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aspects</artifactId>
+            <version>0.23.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -61,7 +72,30 @@
                     <doUpdate>false</doUpdate>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-maven-plugin</artifactId>
+                <version>0.14.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>ajc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>1.9.7</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>1.9.7</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
-
 </project>

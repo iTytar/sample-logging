@@ -7,6 +7,7 @@ import lombok.Data;
  * @author Igor Tytar <tytar@mail.ru>
  */
 @Data
-public class GithubRepo {
-    private String language;
+public class QuoteValue {
+    private String id;
+    private String quote;
 }
