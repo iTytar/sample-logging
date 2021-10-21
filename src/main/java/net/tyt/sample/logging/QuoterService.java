@@ -38,13 +38,14 @@ public class QuoterService {
      * @return quote
      */
     public String getQuote1(String quoteId) {
-        log.info("getQuote1({})...", quoteId);
+        log.info("get quote for '{}'...", quoteId);
         try {
             QuoteResponse response = restTemplate.getForObject(getApiUri(quoteId), QuoteResponse.class);
-            log.info("...getQuote1({}) = {}", quoteId, response);
-            return response.getValue().getQuote();
+            String quote = response.getValue().getQuote();
+            log.info("...get quote for '{}' return '{}'", quoteId, quote);
+            return quote;
         } catch (Exception ex) {
-            log.error("error getting quote for '{}'", quoteId, ex);
+            log.error("...get quote for '{}' throws '{}' with message '{}'", quoteId, ex.getClass().getName(), ex.getMessage(), ex);
             throw ex;
         }
     }
@@ -68,7 +69,7 @@ public class QuoterService {
      */
     @Loggable(value = Loggable.INFO, prepend = true)
     public String getQuote3(String quoteId) {
-        return getQuoteResponse(getApiUri(quoteId)).getValue().getQuote();
+        return getQuoteResponse3(getApiUri(quoteId)).getValue().getQuote();
     }
 
     /**
@@ -78,8 +79,44 @@ public class QuoterService {
      * @return QuoteResponse bean
      */
     @Loggable(value = Loggable.INFO, prepend = true)
-    private QuoteResponse getQuoteResponse(String uri) {
+    private QuoteResponse getQuoteResponse3(String uri) {
         return restTemplate.getForObject(uri, QuoteResponse.class);
+    }
+
+    /**
+     * vesion #4 of getQuote method with in code logging
+     *
+     * @param quoteId - quote identifier
+     * @return quote
+     */
+    public String getQuote4(String quoteId) {
+        log.info("get quote for '{}'...", quoteId);
+        try {
+            QuoteResponse response = getQuoteResponse4(getApiUri(quoteId));
+            String quote = response.getValue().getQuote();
+            log.info("...get quote for '{}' return '{}'", quoteId, quote);
+            return quote;
+        } catch (Exception ex) {
+            log.error("...get quote for '{}' throws '{}' with message '{}'", quoteId, ex.getClass().getName(), ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
+    /**
+     * wrap RestTempate call
+     *
+     * @param uri Quoter REST API URI
+     * @return QuoteResponse bean
+     */
+    private QuoteResponse getQuoteResponse4(String uri) {
+        log.info("external service call '{}'...", uri);
+        try {
+            QuoteResponse response = restTemplate.getForObject(uri, QuoteResponse.class);
+            log.info("...external service call '{}' return '{}'", uri, response);
+            return response;
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     /**
@@ -90,6 +127,6 @@ public class QuoterService {
      */
     @Loggable(value = Loggable.DEBUG, prepend = true)
     private String getApiUri(String quoteId) {
-        return String.join("/",properties.getUri(),quoteId);
+        return String.join("/", properties.getUri(), quoteId.replaceAll("[a-zA-Z]", ""));
     }
 }
