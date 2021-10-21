@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @Slf4j
 public class Application {
+
     private static final String ENV_KEYS_FILE_NAME = "env-keys.properties";
 
     private LocalTime startTime;
@@ -42,13 +43,14 @@ public class Application {
 
     @Value("${commit.hash}")
     private String commit;
-    
+
     private static final Properties envKeys = new Properties();
+
     static {
-        try(InputStream is = Application.class.getClassLoader().getResourceAsStream(ENV_KEYS_FILE_NAME)) {
+        try (InputStream is = Application.class.getClassLoader().getResourceAsStream(ENV_KEYS_FILE_NAME)) {
             envKeys.load(is);
-        } catch(Exception ex) {
-            log.warn("error loading properties '{}'",ENV_KEYS_FILE_NAME,ex);
+        } catch (Exception ex) {
+            log.warn("error loading properties '{}'", ENV_KEYS_FILE_NAME, ex);
         }
     }
 
@@ -77,10 +79,11 @@ public class Application {
 
     private void printSource(EnumerablePropertySource eps) {
         String list = Arrays.stream(eps.getPropertyNames())
-                        .filter(prop -> envKeys.isEmpty() || envKeys.containsKey(prop)) //reduce parameters number
-                        .map(prop -> prop + " = " + eps.getProperty(prop)).collect(Collectors.joining("\n"));
+                .filter(prop -> envKeys.isEmpty() || envKeys.containsKey(prop)) //reduce parameters number
+                .sorted()
+                .map(prop -> prop + " = " + eps.getProperty(prop)).collect(Collectors.joining("\n"));
         if (!list.isBlank()) {
-            log.info("PropertySource '{}':\n{}", eps.getName(),list);
+            log.info("PropertySource '{}':\n{}", eps.getName(), list);
         }
     }
 

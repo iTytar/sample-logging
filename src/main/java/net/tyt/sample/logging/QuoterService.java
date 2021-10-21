@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * Get qoute from REST service https://quoters.apps.pcfone.io/api/
  *
  * @author Igor Tytar <tytar@mail.ru>
  */
@@ -22,7 +23,7 @@ public class QuoterService {
     }
 
     /**
-     * vesion #0 of getQuote method with no logging
+     * vesion #0 of getQuote method with no logging at all
      *
      * @param quoteId - quote identifier
      * @return quote
@@ -52,6 +53,7 @@ public class QuoterService {
 
     /**
      * version #2 of getQuote method with aspect logging
+     * (https://www.jcabi.com/)
      *
      * @param quoteId - quote identifier
      * @return quote
@@ -63,6 +65,7 @@ public class QuoterService {
 
     /**
      * version #3 of getQuote method with aspect deep logging
+     * (https://www.jcabi.com/)
      *
      * @param quoteId - quote identifier
      * @return quote
