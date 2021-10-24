@@ -16,6 +16,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
+        <exec.mainClass>net.tyt.sample.logging.Application</exec.mainClass>
     </properties>
     <scm>
         <connection>scm:git:file:///${basedir}</connection>
