@@ -99,16 +99,17 @@ public class AppInfoConfiguration {
         sources.stream()
                 .filter(EnumerablePropertySource.class::isInstance)
                 .map(EnumerablePropertySource.class::cast)
-                .forEach(this::printSource);
+                .forEach(eps -> printSource(eps,env));
     }
 
-    private void printSource(EnumerablePropertySource eps) {
+    private void printSource(EnumerablePropertySource eps, Environment env) {
+        final boolean notFilter = eps.getName().contains(".properties");
         String list = Arrays.stream(eps.getPropertyNames())
-                .filter(prop -> envKeys.isEmpty() || envKeys.containsKey(prop)) //reduce parameters number
+                .filter(prop -> notFilter || envKeys.isEmpty() || envKeys.containsKey(prop)) //reduce parameters number
                 .sorted()
-                .map(prop -> prop + " = " + eps.getProperty(prop)).collect(Collectors.joining("\n"));
+                .map(prop -> prop + " = " + env.getProperty(prop)).collect(Collectors.joining("\n"));
         if (!list.isBlank()) {
-            log.info("PropertySource '{}':\n{}", eps.getName(), list);
+            log.info("PropertySource '{}' (filtered={}):\n{}", eps.getName(), !notFilter, list);
         }
     }
 
